@@ -24,7 +24,7 @@ def traceroute(hostname):
     return ipList
 
 
-def getMyLoc():
+def getLocation():
     '''
     This part of the code returns MyIP, longitude, latitude, and the city
     '''
@@ -33,7 +33,7 @@ def getMyLoc():
     data = response.json()
     try:
         myIP = data['ip']
-        lon =data['longitude']
+        lon = data['longitude']
         lat = data['latitude']
         city = data['city']
     except KeyError as a:
