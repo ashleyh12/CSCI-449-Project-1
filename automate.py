@@ -31,4 +31,9 @@ def getMyLoc():
     url = 'https://ipapi.co/json/'
     response = requests.get(url)
     data = response.json()
+    try:
+        myIP = data['ip']
+        lon =data['longitude']
+        lat = data['latitude']
+        city = data['city']
     
