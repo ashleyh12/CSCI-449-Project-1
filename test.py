@@ -16,3 +16,15 @@ class locTest(test.locTestCases):
             'city': 'Sample City'
         }
 
+        mock_requests.return_value = mock_response
+    
+        # Here we are calling the function found in automate.py (getLocation)
+        result = getLocation()
+
+        # inputting values from above into an expected result
+        expected_result = ('987.654.321.0', (87.738, -109.243), 'Sample City')
+
+        # Making sure that the result corresponds to the expected result we have above
+        self.assertEqual(result, expected_result)
+
+    @patch('requests.get')
