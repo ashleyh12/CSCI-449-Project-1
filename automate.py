@@ -22,3 +22,13 @@ def traceroute(hostname):
                 IP = IP[1].split(")")
                 ipList.append(IP[0])
     return ipList
+
+
+def getMyLoc():
+    '''
+    This part of the code returns MyIP, longitude, latitude, and the city
+    '''
+    url = 'https://ipapi.co/json/'
+    response = requests.get(url)
+    data = response.json()
+    
