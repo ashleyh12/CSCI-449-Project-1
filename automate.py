@@ -16,9 +16,9 @@ def traceroute(hostname):
     for line in iter(traceroute.stdout.readline,b""):
         line = line.decode("UTF-8")
         IP = line.split("  ")
-        if len(IP)>1:
+        if len(IP) > 1:
             IP = IP[1].split("(")
-            if len(IP)>1:
+            if len(IP) > 1:
                 IP = IP[1].split(")")
                 ipList.append(IP[0])
     return ipList
@@ -36,4 +36,9 @@ def getMyLoc():
         lon =data['longitude']
         lat = data['latitude']
         city = data['city']
+    except KeyError as a:
+        print('Error not found')
+        exit()
+
+    return (myIP, (lon,lat), city)
     
