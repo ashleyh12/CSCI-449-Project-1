@@ -74,7 +74,7 @@ def getLoc(ipList):
                 continue
         except KeyError:
             pass
-        
+
         lon =data['longitude']
         lat = data['latitude']
         if lon == None or lat == None:
@@ -83,3 +83,13 @@ def getLoc(ipList):
         List.append((ipAddress,(lon,lat),city))
 
     return List
+
+def mapsInit(fig):
+
+    fig.update_layout(
+    margin ={'l':50,'t':50,'b':50,'r':50},
+    mapbox = {
+        'center': {'lon': 10, 'lat': 10},
+        'style': "stamen-terrain",
+        'center': {'lon': -20, 'lat': -20},
+        'zoom': 1})
