@@ -42,12 +42,16 @@ def getLocation():
     return (myIP, (lon,lat), city)
 
 
-def getFinalLocation(IP):
+def getFinalIP(IP):
     '''
-    This part of the code takes in an IP address and returns longitude, latitude, and the city
+    This part of the code takes in IP address and returns its' longitude, latitude, and the city
     '''
     url = f'https://ipapi.co/{IP}/json/'
     response = request.get(url)
     data = response.json()
+    try:
+        lon = data['longitude']
+        lat = data['latitude']
+        city = data['city']
 
     
