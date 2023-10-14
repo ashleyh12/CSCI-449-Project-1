@@ -57,5 +57,29 @@ def getFinalIP(IP):
         print('Error not found')
         exit()
     return (IP, (lon,lat), city)
+ 
+def getLoc(ipList):
+    '''
+    Get's Ip address list and returns a list of tuples of IP, longitude, latitude, and the city
+    '''
+    List = []
+    for ipAddress in ipList:
+        url = f'https://ipapi.co/{ipAddress}/json/'
+        response = requests.get(url)
+        data = response.json()
+        
+        # This is to check if the IP address is private or not
+        try:
+            if data['error'] == True:
+                continue
+        except KeyError:
+            pass
+        
+        lon =data['longitude']
+        lat = data['latitude']
+        if lon == None or lat == None:
+            continue
+        city = data['city']
+        List.append((ipAddress,(lon,lat),city))
 
-    
+    return List
