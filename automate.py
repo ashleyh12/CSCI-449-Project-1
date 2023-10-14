@@ -53,5 +53,9 @@ def getFinalIP(IP):
         lon = data['longitude']
         lat = data['latitude']
         city = data['city']
+    except KeyError as a:
+        print('Error not found')
+        exit()
+    return (IP, (lon,lat), city)
 
     
