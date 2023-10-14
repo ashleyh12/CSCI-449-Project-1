@@ -57,7 +57,8 @@ def getFinalIP(IP):
         print('Error not found')
         exit()
     return (IP, (lon,lat), city)
- 
+
+
 def getListLoc(ipList):
     '''
     Get's Ip address list and returns a list of tuples of IP, longitude, latitude, and the city
@@ -84,9 +85,9 @@ def getListLoc(ipList):
 
     return List
 
-def mapInitization(fig):
+def mapInitization(figure):
 
-    fig.update_layout(
+    figure.update_layout(
     margin ={'l':50,'t':50,'b':50,'r':50},
     mapbox = {
         'center': {'lon': 10, 'lat': 10},
@@ -94,10 +95,19 @@ def mapInitization(fig):
         'center': {'lon': -20, 'lat': -20},
         'zoom': 1})
 
-def addingRoute(fig,name,position):
+def addingRoute(figure,name,position):
     '''
     setting up the name and position (longitude and latitude) of the route)
     '''
-    longitudeRoute = position[0][0]
-    latitudeRoute = position[0][1]
+    lonRoute = position[0][0]
+    latRoute = position[0][1]
     city = position[1]
+    figure.add_trace(go.Scattermapbox
+        (
+        name = name,
+        text = city,
+        mode = "markers+lines",
+        lon = lonRoute,
+        lat = latRoute,
+        marker = {'size':10})
+        )
