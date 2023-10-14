@@ -24,7 +24,7 @@ def traceroute(hostname):
     return ipList
 
 
-def getLocation():
+def getMyLocation():
     '''
     This part of the code returns MyIP, longitude, latitude, and the city
     '''
@@ -58,7 +58,7 @@ def getFinalIP(IP):
         exit()
     return (IP, (lon,lat), city)
  
-def getLoc(ipList):
+def getListLoc(ipList):
     '''
     Get's Ip address list and returns a list of tuples of IP, longitude, latitude, and the city
     '''
@@ -84,7 +84,7 @@ def getLoc(ipList):
 
     return List
 
-def mapsInit(fig):
+def mapInitization(fig):
 
     fig.update_layout(
     margin ={'l':50,'t':50,'b':50,'r':50},
