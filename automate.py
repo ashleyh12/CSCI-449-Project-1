@@ -85,9 +85,9 @@ def getListLoc(ipList):
 
     return List
 
-def mapInitization(figure):
+def mapInitization(fig):
 
-    figure.update_layout(
+    fig.update_layout(
     margin ={'l':50,'t':50,'b':50,'r':50},
     mapbox = {
         'center': {'lon': 10, 'lat': 10},
@@ -95,14 +95,14 @@ def mapInitization(figure):
         'center': {'lon': -20, 'lat': -20},
         'zoom': 1})
 
-def addingRoute(figure,name,position):
+def addingRoute(fig,name,position):
     '''
     setting up the name and position (longitude and latitude) of the route)
     '''
     lonRoute = position[0][0]
     latRoute = position[0][1]
     city = position[1]
-    figure.add_trace(go.Scattermapbox
+    fig.add_trace(go.Scattermapbox
         (
         name = name,
         text = city,
