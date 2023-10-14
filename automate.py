@@ -39,6 +39,15 @@ def getLocation():
     except KeyError as a:
         print('Error not found')
         exit()
-
     return (myIP, (lon,lat), city)
+
+
+def getFinalLocation(IP):
+    '''
+    This part of the code takes in an IP address and returns longitude, latitude, and the city
+    '''
+    url = f'https://ipapi.co/{IP}/json/'
+    response = request.get(url)
+    data = response.json()
+
     
