@@ -111,3 +111,26 @@ def addingRoute(fig,name,position):
         lat = latRoute,
         marker = {'size':10})
         )
+
+def mark(fig ,markName, position,name='My IP'):
+    '''
+    Marks the IP address on the map
+    '''
+    lonPath = position[0]
+    latPath = position[1]
+    fig.add_trace(go.Scattermapbox(
+        name = name,
+        text = markName,    
+        mode = "markers+text",
+        lon = (lonPath,),
+        lat = (latPath,),
+        marker = {'size': 15}
+        ))
+    
+def printHelp():
+    print('''Use the code by typing in the following format:
+        python3 traceroute.py [hostname]
+    Example:
+        python3 traceroute.py Howard.edu
+    ''')
+
