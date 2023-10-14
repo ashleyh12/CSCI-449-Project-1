@@ -93,3 +93,11 @@ def mapInitization(fig):
         'style': "stamen-terrain",
         'center': {'lon': -20, 'lat': -20},
         'zoom': 1})
+
+def addingRoute(fig,name,position):
+    '''
+    setting up the name and position (longitude and latitude) of the route)
+    '''
+    longitudeRoute = position[0][0]
+    latitudeRoute = position[0][1]
+    city = position[1]
