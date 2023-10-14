@@ -133,4 +133,13 @@ def printHelp():
     Example:
         python3 traceroute.py Howard.edu
     ''')
+    
+if len(sys.argv)<2:
+    printHelp()
+    exit()
+    
+hostname = sys.argv[1]
+
+# get my location (myIP,(lon,lat),city)
+myLoc = getMyLocation()
 
