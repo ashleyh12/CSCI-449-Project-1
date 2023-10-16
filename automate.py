@@ -143,3 +143,22 @@ hostname = sys.argv[1]
 # get my location (myIP,(lon,lat),city)
 myLoc = getMyLocation()
 
+# get the IP address of the target. Run trace route then find the long and lat
+targetIP = socket.gethostbyname(hostname)
+targetLoc = getFinalIP(targetIP)
+ipList = traceroute(hostname)
+routeLocList = getMyLocation(ipList)
+routeLocList.insert(0,myLoc)
+routeLocList.append(targetLoc)
+routeLocLon =[]
+routeLocLat = []
+tempLon = 0
+tempLat = 0
+# This is to add the route to the map
+for x in routeLocList:
+    if x[1][0]-tempLon == 0 or x[1][1]-tempLat == 0:
+        continue
+    routeLocLon.append(x[1][0])
+    routeLocLat.append(x[1][1])
+    tempLon = x[1][0]
+    tempLat = x[1][1]
