@@ -177,4 +177,8 @@ for i in range(len(routeLocLon)-1):
     addRoute(fig,f'route{i}',((routeLocLon[i:i+2],routeLocLat[i:i+2]),route_city))
 print(targetLoc[0],'---',targetLoc[2])
 
-            route_ip = x[0]
+# marking both the source and target IP 
+mark(fig,f'My IP - {myLoc[2]}', myLoc[1])
+mark(fig,f'{hostname} - {targetLoc[2]}',targetLoc[1],name = hostname)
+
+fig.show()
