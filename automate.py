@@ -47,7 +47,7 @@ def getFinalIP(IP):
     This part of the code takes in IP address and returns its' longitude, latitude, and the city
     '''
     url = f'https://ipapi.co/{IP}/json/'
-    response = request.get(url)
+    response = requests.get(url)
     data = response.json()
     try:
         lon = data['longitude']
