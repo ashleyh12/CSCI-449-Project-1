@@ -166,15 +166,16 @@ for x in routeLocList:
 
 # creating the map(s)
 fig = go.Figure()
-mapsInit(fig)
+mapInitization(fig)
 
 # creating the route
 for i in range(len(routeLocLon)-1):
     for x in routeLocList:
         if (routeLocLon[i],routeLocLat[i]) in x:
             route_city = x[2]
+            route_ip = x[0]
     print(route_ip,'---',route_city)
-    addRoute(fig,f'route{i}',((routeLocLon[i:i+2],routeLocLat[i:i+2]),route_city))
+    addingRoute(fig,f'route{i}',((routeLocLon[i:i+2],routeLocLat[i:i+2]),route_city))
 print(targetLoc[0],'---',targetLoc[2])
 
 # marking both the source and target IP 
