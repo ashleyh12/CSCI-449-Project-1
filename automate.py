@@ -167,3 +167,10 @@ for x in routeLocList:
 # creating the map(s)
 fig = go.Figure()
 mapsInit(fig)
+
+# creating the route
+for i in range(len(routeLocLon)-1):
+    for x in routeLocList:
+        if (routeLocLon[i],routeLocLat[i]) in x:
+            route_city = x[2]
+            route_ip = x[0]
