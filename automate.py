@@ -76,7 +76,7 @@ def getListLoc(ipList):
         except KeyError:
             pass
 
-        lon =data['longitude']
+        lon = data['longitude']
         lat = data['latitude']
         if lon == None or lat == None:
             continue
@@ -88,7 +88,7 @@ def getListLoc(ipList):
 def mapInitization(fig):
 
     fig.update_layout(
-    margin ={'l':50,'t':50,'b':50,'r':50},
+    margin = {'l':50,'t':50,'b':50,'r':50},
     mapbox = {
         'center': {'lon': 10, 'lat': 10},
         'style': "stamen-terrain",
@@ -150,7 +150,7 @@ ipList = traceroute(hostname)
 routeLocList = getMyLocation(ipList)
 routeLocList.insert(0,myLoc)
 routeLocList.append(targetLoc)
-routeLocLon =[]
+routeLocLon = []
 routeLocLat = []
 tempLon = 0
 tempLat = 0
@@ -162,3 +162,8 @@ for x in routeLocList:
     routeLocLat.append(x[1][1])
     tempLon = x[1][0]
     tempLat = x[1][1]
+
+
+# creating the map(s)
+fig = go.Figure()
+mapsInit(fig)
