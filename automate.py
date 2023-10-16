@@ -173,4 +173,8 @@ for i in range(len(routeLocLon)-1):
     for x in routeLocList:
         if (routeLocLon[i],routeLocLat[i]) in x:
             route_city = x[2]
+    print(route_ip,'---',route_city)
+    addRoute(fig,f'route{i}',((routeLocLon[i:i+2],routeLocLat[i:i+2]),route_city))
+print(targetLoc[0],'---',targetLoc[2])
+
             route_ip = x[0]
