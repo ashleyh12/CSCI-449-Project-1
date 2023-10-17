@@ -11,6 +11,8 @@ def traceroute(hostname):
     '''
     This will take in our hostname or IP address and return a list of the IP hops
     '''
+    #Use "tracert" for Windows and "traceroute" for Mac
+    
     traceroute = subprocess.Popen(["traceroute",hostname],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     ipList = []
     for line in iter(traceroute.stdout.readline,b""):
@@ -147,7 +149,9 @@ myLoc = getMyLocation()
 targetIP = socket.gethostbyname(hostname)
 targetLoc = getFinalIP(targetIP)
 ipList = traceroute(hostname)
-routeLocList = getMyLocation(ipList)
+
+routeLocList = getListLoc(ipList)
+
 routeLocList.insert(0,myLoc)
 routeLocList.append(targetLoc)
 routeLocLon = []
