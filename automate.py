@@ -13,7 +13,7 @@ def traceroute(hostname):
     '''
     #Use "tracert" for Windows and "traceroute" for Mac
     
-    traceroute = subprocess.Popen(["tracert",hostname],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    traceroute = subprocess.Popen(["traceroute",hostname],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     ipList = []
     for line in iter(traceroute.stdout.readline,b""):
         line = line.decode("UTF-8")
