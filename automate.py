@@ -13,7 +13,7 @@ def traceroute(hostname):
     '''
     #Use "tracert" for Windows and "traceroute" for Mac
     
-    traceroute = subprocess.Popen(["traceroute",hostname],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    traceroute = subprocess.Popen(["tracert",hostname],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     ipList = []
     for line in iter(traceroute.stdout.readline,b""):
         line = line.decode("UTF-8")
@@ -34,12 +34,12 @@ def getMyLocation():
     response = requests.get(url)
     data = response.json()
     try:
-        myIP = data['ip']
-        lon = data['longitude']
-        lat = data['latitude']
-        city = data['city']
+        myIP = data.get('ip', 'N/A')
+        lon = data.get('longitude', 'N/A')
+        lat = data.get('latitude', 'N/A')
+        city = data.get('city', 'N/A')
     except KeyError as a:
-        print('Error not found')
+        print('Error not found for getMyLocation')
         exit()
     return (myIP, (lon,lat), city)
 
@@ -52,11 +52,11 @@ def getFinalIP(IP):
     response = requests.get(url)
     data = response.json()
     try:
-        lon = data['longitude']
-        lat = data['latitude']
-        city = data['city']
+        lon = data.get('longitude', 'N/A')
+        lat = data.get('latitude', 'N/A')
+        city = data.get('city', 'N/A')
     except KeyError as a:
-        print('Error not found')
+        print('Error not found for getFinalIP')
         exit()
     return (IP, (lon,lat), city)
 
