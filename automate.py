@@ -58,10 +58,6 @@ if __name__ == "__main__":
         if target_ip in G.nodes():
             print("Done!")
 
-    # Draw and display the network graph
-    pos = nx.spring_layout(G)
-    nx.draw(G, pos, with_labels=True, node_size=2000, node_color="skyblue", font_size=10, font_color="black")
-    plt.show()
 
     '''Things to do next: separate the traceroute function and the network graph function
 
