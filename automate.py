@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     Network graph function should read the file and create the network graph ~ We'll need to create another file to do this.
 
-    Step 1: Remove the networkx code from this file and put it into a new file called network_graph.py
+    Step 1: Remove the networkx code from this file and put it into a new file called NetworkX.py
     Step 2: Make the traceroute code dump the ip addresses into a file (There will definetly be more sub steps)
     Step 3: Have the network graph code read the file and create the network graph
 
