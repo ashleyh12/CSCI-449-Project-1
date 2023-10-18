@@ -58,6 +58,20 @@ if __name__ == "__main__":
         if target_ip in G.nodes():
             print("Done!")
 
+    
+    def custom_traceroute(target_ip, output_file):
+        max_hops = 8  # Maximum number of hops
+        print(f"Traceroute to {target_ip}")
+
+    logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+    
+    with open(output_file, "w") as f:
+            for i in range(1,28):
+                ipaddr = f"10.0.0.{i}"
+                pkt = IP(dst=target_ip, ttl=ttl) / ICMP()
+                reply = sr1(pkt, verbose=0, timeout=2)
+            
+        
 
     '''Things to do next: separate the traceroute function and the network graph function
 
