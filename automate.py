@@ -59,17 +59,7 @@ if __name__ == "__main__":
             print("Done!")
 
     
-    def custom_traceroute(target_ip, output_file):
-        max_hops = 8  # Maximum number of hops
-        print(f"Traceroute to {target_ip}")
-
-    logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
-    
-    with open(output_file, "w") as f:
-            for i in range(1,28):
-                ipaddr = f"10.0.0.{i}"
-                pkt = IP(dst=target_ip, ttl=ttl) / ICMP()
-                reply = sr1(pkt, verbose=0, timeout=2)
+        
             
         
 
@@ -80,7 +70,7 @@ if __name__ == "__main__":
     Network graph function should read the file and create the network graph ~ We'll need to create another file to do this.
 
     Step 1: Remove the networkx code from this file and put it into a new file called NetworkX.py
-    Step 2: Make the traceroute code dump the ip addresses into a file (There will definetly be more sub steps)
+    Step 2: Make the traceroute code dump the ip addresses into a file (There will definitely be more sub steps)
     Step 3: Have the network graph code read the file and create the network graph
 
     '''
