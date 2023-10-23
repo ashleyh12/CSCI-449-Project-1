@@ -4,7 +4,7 @@ import logging
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
-def custom_traceroute(target_ip, G, output_file):
+def custom_traceroute(target_ip, output_file):
     max_hops = 7  # Maximum number of hops
 
     print(f"Traceroute to {target_ip}")
@@ -35,24 +35,12 @@ def custom_traceroute(target_ip, G, output_file):
         with open(output_file, 'a') as f:
             f.write(f"{ttl}. {reply.src}\n")
 
-        if prev_hop and current_hop:
-            G.add_node(prev_hop)
-            G.add_node(current_hop)
-            G.add_edge(prev_hop, current_hop)
-
         prev_hop = current_hop
-
-    return G
-
-def traceroute_thread(target_ip, G, output_file):
-    G = custom_traceroute(target_ip, G, output_file)
-    print("\n")
 
 if __name__ == "__main__":
     public_ip_range = range(1, 10)  # Change this to the desired range
     private_ip_range = range(1, 10)  # Change this to the desired range
 
-    G = nx.Graph()
     output_file = "traceroute_results.txt"
 
     with open(output_file, 'a') as f:
@@ -62,18 +50,18 @@ if __name__ == "__main__":
 
     for i in public_ip_range:
         target_ip = f"138.238.0.{i}"
-        t = threading.Thread(target=traceroute_thread, args=(target_ip, G, output_file))
+        t = threading.Thread(target=custom_traceroute, args=(target_ip, output_file))
         threads.append(t)
         t.start()
-
+'''
     for i in private_ip_range:
         target_ip = f"10.0.0.{i}"
-        t = threading.Thread(target=traceroute_thread, args=(target_ip, G, output_file))
+        t = threading.Thread(target=custom_traceroute, args=(target_ip, output_file))
         threads.append(t)
         t.start()
-
-    for t in threads:
-        t.join()
+'''
+for t in threads:
+    t.join()
 
 
     '''Things to do next: separate the traceroute function and the network graph function
