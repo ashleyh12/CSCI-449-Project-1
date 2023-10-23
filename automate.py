@@ -1,3 +1,4 @@
+import threading
 from scapy.all import *
 import logging
 
@@ -43,6 +44,10 @@ def custom_traceroute(target_ip, G, output_file):
 
     return G
 
+def traceroute_thread(target_ip, G, output_file):
+    G = custom_traceroute(target_ip, G, output_file)
+    print("\n")
+
 if __name__ == "__main__":
     public_ip_range = range(1, 10)  # Change this to the desired range
     private_ip_range = range(1, 10)  # Change this to the desired range
@@ -53,15 +58,22 @@ if __name__ == "__main__":
     with open(output_file, 'a') as f:
         f.write("Traceroute Results\n\n")
 
+    threads = []
+
     for i in public_ip_range:
         target_ip = f"138.238.0.{i}"
-        G = custom_traceroute(target_ip, G, output_file)
-        print("\n")
+        t = threading.Thread(target=traceroute_thread, args=(target_ip, G, output_file))
+        threads.append(t)
+        t.start()
 
     for i in private_ip_range:
         target_ip = f"10.0.0.{i}"
-        G = custom_traceroute(target_ip, G, output_file)
-        print("\n")
+        t = threading.Thread(target=traceroute_thread, args=(target_ip, G, output_file))
+        threads.append(t)
+        t.start()
+
+    for t in threads:
+        t.join()
 
 
     '''Things to do next: separate the traceroute function and the network graph function
