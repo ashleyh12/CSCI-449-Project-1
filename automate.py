@@ -1,47 +1,54 @@
 import threading
 from scapy.all import *
 import logging
+import json
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
 def custom_traceroute(target_ip, output_file):
-    max_hops = 7  # Maximum number of hops
+    max_hops = 8  # Maximum number of hops
+    traceroute_data = {
+        "target_ip": target_ip,
+        "traceroute": []
+    }
 
     print(f"Traceroute to {target_ip}")
 
     prev_hop = None  # To track the previous hop
 
-    with open(output_file, 'a') as f:
-        f.write(f"Traceroute to {target_ip}\n")
     for ttl in range(1, max_hops + 1):
         pkt = IP(dst=target_ip, ttl=ttl) / UDP(dport=33434)
         reply = sr1(pkt, verbose=0, timeout=5, iface="en0")
 
-        if reply is None:
-            print(f"{ttl}. *")
-            current_hop = None
-        elif reply.type == 0:
-            print(f"{ttl}. {reply.src}")
-            current_hop = reply.src
-            if reply.src == target_ip:
-                print("Destination reached.")
-                with open(output_file, 'a') as f:
-                    f.write(f"{ttl}. {reply.src} (Destination reached)\n")
-                break
-        else:
-            print(f"{ttl}. {reply.src} (Type {reply.type})")
-            current_hop = reply.src
+        if reply is not None:
+            hop_data = {
+                "hop": ttl,
+                "ip": reply.src,
+            }
 
-        with open(output_file, 'a') as f:
-            f.write(f"{ttl}. {reply.src}\n")
+            if reply.type == 0:
+                print(f"{ttl}. {reply.src}")
+                current_hop = reply.src
+                if reply.src == target_ip:
+                    print("Destination reached.")
+                    break
+            else:
+                print(f"{ttl}. {reply.src} (Type {reply.type})")
+                current_hop = reply.src
+
+            traceroute_data["traceroute"].append(hop_data)
 
         prev_hop = current_hop
 
-if __name__ == "__main__":
-    public_ip_range = range(1, 10)  # Change this to the desired range
-    private_ip_range = range(1, 10)  # Change this to the desired range
+    # Save the traceroute data to a JSON file
+    with open(output_file, 'a') as f:
+        json.dump(traceroute_data, f, indent=4)
 
-    output_file = "traceroute_results.txt"
+if __name__ == "__main__":
+    public_ip_range = range(1, 100)  # Change this to the desired range
+    private_ip_range = range(1, 100)  # Change this to the desired range
+
+    output_file = "traceroute_results.json"
 
     with open(output_file, 'a') as f:
         f.write("Traceroute Results\n\n")
@@ -53,15 +60,15 @@ if __name__ == "__main__":
         t = threading.Thread(target=custom_traceroute, args=(target_ip, output_file))
         threads.append(t)
         t.start()
-'''
+
     for i in private_ip_range:
         target_ip = f"10.0.0.{i}"
         t = threading.Thread(target=custom_traceroute, args=(target_ip, output_file))
         threads.append(t)
         t.start()
-'''
-for t in threads:
-    t.join()
+
+    for t in threads:
+        t.join()
 
 
     '''Things to do next: separate the traceroute function and the network graph function

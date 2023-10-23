@@ -136,3 +136,78 @@ if __name__ == "__main__":
         custom_traceroute(target_ip, "traceroute_results.txt")
         print(f"Traceroute to {target_ip} completed and results appended to traceroute_results.txt")
 '''
+
+import threading
+from scapy.all import *
+import logging
+import json
+
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+
+def custom_traceroute(target_ip, output_file):
+    max_hops = 8  # Maximum number of hops
+    traceroute_data = {
+        "target_ip": target_ip,
+        "traceroute": []
+    }
+
+    print(f"Traceroute to {target_ip}")
+
+    prev_hop = None  # To track the previous hop
+
+    for ttl in range(1, max_hops + 1):
+        pkt = IP(dst=target_ip, ttl=ttl) / UDP(dport=33434)
+        reply = sr1(pkt, verbose=0, timeout=5, iface="en0")
+
+        if reply is not None:
+            hop_data = {
+                "hop": ttl,
+                "ip": reply.src,
+            }
+
+            if reply.type == 0:
+                print(f"{ttl}. {reply.src}")
+                current_hop = reply.src
+                if reply.src == target_ip:
+                    print("Destination reached.")
+                    break
+            else:
+                print(f"{ttl}. {reply.src} (Type {reply.type})")
+                current_hop = reply.src
+
+            traceroute_data["traceroute"].append(hop_data)
+
+        prev_hop = current_hop
+
+    # Save the traceroute data to a JSON file
+    with open(output_file, 'a') as f:
+        json.dump(traceroute_data, f, indent=4)
+
+if __name__ == "__main__":
+    public_ip_range = range(1, 100)  # Change this to the desired range
+    private_ip_range = range(1, 100)  # Change this to the desired range
+
+    output_file = "traceroute_results.json"
+
+    with open(output_file, 'a') as f:
+        f.write("Traceroute Results\n\n")
+
+    threads = []
+
+    for i in public_ip_range:
+        target_ip = f"138.238.0.{i}"
+        t = threading.Thread(target=custom_traceroute, args=(target_ip, output_file))
+        threads.append(t)
+        t.start()
+
+    for i in private_ip_range:
+        target_ip = f"10.0.0.{i}"
+        t = threading.Thread(target=custom_traceroute, args=(target_ip, output_file))
+        threads.append(t)
+        t.start()
+
+    for t in threads:
+        t.join()
+
+
+    
