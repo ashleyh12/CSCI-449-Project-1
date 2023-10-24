@@ -35,7 +35,7 @@ def custom_traceroute(target_ip, output_file):
 
     for ttl in range(1, max_hops + 1):
         pkt = IP(dst=target_ip, ttl=ttl) / UDP(dport=33434)
-        reply = sr1(pkt, verbose=0, timeout=5, iface="en0")
+        reply = sr1(pkt, verbose=0, timeout=1, iface="en0")
 
         if reply is not None:
             hop_data = {
