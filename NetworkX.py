@@ -2,35 +2,41 @@
 Networkx function should go here.
 
 '''
-
+import json
 import networkx as nx
-import matplotlib.pyplot as plt
 
-def create_topology_graph(filename):
-    G = nx.Graph()
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-    
-    for line in lines:
-        if "Traceroute to" in line:
-            target_ip = line.split("Traceroute to ")[1].strip()
-        elif "Destination reached" in line:
-            continue  # Skip destination reached lines
-        else:
-            parts = line.split()
-            if len(parts) >= 2:
-                hop_number, hop_ip = parts[0], parts[1]
-                G.add_node(hop_ip)
-                if hop_number != "1.":
-                    prev_hop = parts[1]
-                    G.add_edge(prev_hop, hop_ip)
-    
-    return G
+# Create an empty directed graph
+G = nx.DiGraph()
 
-if __name__ == "__main":
-    topology_graph = create_topology_graph("traceroute_results.txt")
+# Open the file for reading
+with open("traceroute_results.json", "r") as f:
+    json_data = ""
+    for line in f:
+        json_data += line.strip()
 
-    # Draw and display the network graph
-    pos = nx.spring_layout(topology_graph)
-    nx.draw(topology_graph, pos, with_labels=True, node_size=2000, node_color="skyblue", font_size=10, font_color="black")
-    plt.show()
+        # Check if the line contains a complete JSON object
+        if json_data and json_data[-1] == "}":
+            try:
+                data = json.loads(json_data)
+
+                if "target_ip" in data and "traceroute" in data:
+                    target_ip = data["target_ip"]
+                    traceroute = data["traceroute"]
+
+                    # Add nodes and edges to the graph based on the traceroute data
+                    previous_hop = None
+                    for hop in traceroute:
+                        ip = hop.get("ip")
+                        if ip:
+                            G.add_node(ip)
+                            if previous_hop:
+                                G.add_edge(previous_hop, ip)
+                            previous_hop = ip
+
+                json_data = ""
+
+            except json.JSONDecodeError:
+                json_data = ""
+
+
+

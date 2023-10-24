@@ -63,6 +63,7 @@ def custom_traceroute(target_ip, output_file):
     # Save the traceroute data to a JSON file
     with open(output_file, 'a') as f:
         json.dump(traceroute_data, f, indent=4)
+        f.write(",")
 
 def generate_ip_range(start, end, max_addresses):
     last_processed_ip = load_last_ip()
