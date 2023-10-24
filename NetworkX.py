@@ -11,15 +11,20 @@ def create_network_topology(json_file):
         data = json.load(f)
 
     G = nx.Graph()
+    target_ips_set = set()  # Use a set to filter out duplicates
 
     for entry in data['output']:
         target_ip = entry['target_ip']
-        G.add_node(target_ip)
+        if target_ip not in target_ips_set:
+            G.add_node(target_ip)
+            target_ips_set.add(target_ip)
 
         for hop in entry['traceroute']:
             hop_ip = hop['ip']
-            G.add_node(hop_ip)
-            G.add_edge(target_ip, hop_ip)
+            
+            if not hop_ip.startswith("208"):  # Filter out IPs starting with "208"
+                G.add_node(hop_ip)
+                G.add_edge(target_ip, hop_ip)
 
     return G
 
@@ -33,5 +38,5 @@ def main():
 
 if __name__ == '__main__':
     main()
- 
+
  
