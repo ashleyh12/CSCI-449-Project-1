@@ -32,7 +32,7 @@ def custom_traceroute(target_ip, output_file):
     print(f"Traceroute to {target_ip}")
 
     prev_hop = None  # To track the previous hop
-
+    current_hop = None # To track the current hop
     for ttl in range(1, max_hops + 1):
         pkt = IP(dst=target_ip, ttl=ttl) / UDP(dport=33434)
         reply = sr1(pkt, verbose=0, timeout=1, iface="en0")
