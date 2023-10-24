@@ -275,6 +275,7 @@ def custom_traceroute(target_ip, output_file):
     # Save the traceroute data to a JSON file
     with open(output_file, 'a') as f:
         json.dump(traceroute_data, f, indent=4)
+        f.write(",\n")  # Add a comma and a newline to separate entries
 
 def generate_ip_range(start, end, max_addresses):
     last_processed_ip = load_last_ip()
@@ -297,6 +298,9 @@ if __name__ == "__main__":
 
     output_file = "traceroute_results.json"
 
+    with open(output_file, 'a') as f:
+        f.write('{"output": [\n')  # Start the JSON structure
+
     ip_addresses = []
     for target_ip in generate_ip_range(public_ip_start, public_ip_end, MAX_IP_ADDRESSES):
         ip_addresses.append(target_ip)
@@ -307,3 +311,6 @@ if __name__ == "__main__":
     # Use multiprocessing to run the traceroutes
     with Pool(processes=10) as pool:
         pool.starmap(custom_traceroute, [(ip, output_file) for ip in ip_addresses])
+
+    with open(output_file, 'a') as f:
+        f.write("]}\n")  # End the JSON structure
