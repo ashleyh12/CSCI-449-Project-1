@@ -136,7 +136,7 @@ if __name__ == "__main__":
         custom_traceroute(target_ip, "traceroute_results.txt")
         print(f"Traceroute to {target_ip} completed and results appended to traceroute_results.txt")
 '''
-
+'''
 import threading
 from scapy.all import *
 import logging
@@ -208,6 +208,102 @@ if __name__ == "__main__":
 
     for t in threads:
         t.join()
+'''
 
+from scapy.all import *
+import logging
+import json
+from multiprocessing import Pool
+import os
 
-    
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+
+# Set the maximum number of IP addresses to process
+MAX_IP_ADDRESSES = 1000000
+
+def save_last_ip(target_ip):
+    # Save the last processed IP address to a file
+    with open("last_processed_ip.txt", "w") as f:
+        f.write(target_ip)
+
+def load_last_ip():
+    # Load the last processed IP address from the file
+    try:
+        with open("last_processed_ip.txt", "r") as f:
+            return f.read()
+    except FileNotFoundError:
+        return None
+
+def custom_traceroute(target_ip, output_file):
+    max_hops = 8  # Maximum number of hops
+    traceroute_data = {
+        "target_ip": target_ip,
+        "traceroute": []
+    }
+
+    print(f"Traceroute to {target_ip}")
+
+    prev_hop = None  # To track the previous hop
+
+    for ttl in range(1, max_hops + 1):
+        pkt = IP(dst=target_ip, ttl=ttl) / UDP(dport=33434)
+        reply = sr1(pkt, verbose=0, timeout=5, iface="en0")
+
+        if reply is not None:
+            hop_data = {
+                "hop": ttl,
+                "ip": reply.src,
+            }
+
+            if reply.type == 0:
+                print(f"{ttl}. {reply.src}")
+                current_hop = reply.src
+                if reply.src == target_ip:
+                    print("Destination reached.")
+                    break
+            else:
+                print(f"{ttl}. {reply.src} (Type {reply.type})")
+                current_hop = reply.src
+
+            traceroute_data["traceroute"].append(hop_data)
+
+        prev_hop = current_hop
+
+    # Save the last processed IP address
+    save_last_ip(target_ip)
+
+    # Save the traceroute data to a JSON file
+    with open(output_file, 'a') as f:
+        json.dump(traceroute_data, f, indent=4)
+
+def generate_ip_range(start, end, max_addresses):
+    last_processed_ip = load_last_ip()
+
+    for a in range(start[0], end[0] + 1):
+        for b in range(start[1], end[1] + 1):
+            for c in range(start[2], end[2] + 1):
+                for d in range(start[3], end[3] + 1):
+                    target_ip = f"{a}.{b}.{c}.{d}"
+
+                    if last_processed_ip and target_ip == last_processed_ip:
+                        return  # Stop generating IP addresses when the limit is reached
+                    yield target_ip
+
+if __name__ == "__main__":
+    public_ip_start = (138, 238, 0, 0)
+    public_ip_end = (138, 238, 255, 255)
+    private_ip_start = (10, 0, 0, 0)
+    private_ip_end = (10, 255, 255, 255)
+
+    output_file = "traceroute_results.json"
+
+    ip_addresses = []
+    for target_ip in generate_ip_range(public_ip_start, public_ip_end, MAX_IP_ADDRESSES):
+        ip_addresses.append(target_ip)
+
+    for target_ip in generate_ip_range(private_ip_start, private_ip_end, MAX_IP_ADDRESSES):
+        ip_addresses.append(target_ip)
+
+    # Use multiprocessing to run the traceroutes
+    with Pool(processes=10) as pool:
+        pool.starmap(custom_traceroute, [(ip, output_file) for ip in ip_addresses])
