@@ -345,7 +345,7 @@ def main():
     json_file = 'SampleToplogyCode.json'  
     G = create_network_topology(json_file)
 
-    pos = nx.spring_layout(G, k=0.25, seed=43)
+    pos = nx.spring_layout(G, k=0.1, seed=43)
     nx.draw(G, pos, with_labels=True, node_size=500, font_size=8, node_color='skyblue')
     plt.show()
 
