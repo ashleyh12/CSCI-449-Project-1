@@ -29,10 +29,10 @@ def create_network_topology(json_file):
     return G
 
 def main():
-    json_file = 'traceroute_results_AshleyUGL.json'  
+    json_file = 'traceroute_results.json'  
     G = create_network_topology(json_file)
 
-    pos = nx.spring_layout(G, seed=42)
+    pos = nx.spring_layout(G, k=0.1, seed=42)
     nx.draw(G, pos, with_labels=True, node_size=500, font_size=8, node_color='skyblue')
     plt.show()
 
