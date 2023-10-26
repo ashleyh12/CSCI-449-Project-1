@@ -1,0 +1,7 @@
+requests==2.27.1
+scapy
+json
+certifi==2022.5.18.1
+charset-normalizer==2.0.12
+urllib3==1.26.9
+plotly==5.8.0
